@@ -1,0 +1,12 @@
+.uploadframe_position{
+    display: flex;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 3vh;
+    height: 81vh;
+    background-color: #F7F7F9;
+}
+
+.upload_child{
+
+}

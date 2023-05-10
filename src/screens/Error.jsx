@@ -5,7 +5,7 @@ import './Error.css';
 
 import BlueButton from "../components/buttons/BlueButton";
 
-function Error(props) {
+function Error() {
     return (
         <>
             <div className={'center_position'}>

@@ -10,33 +10,47 @@ body{
     height: 61vh;
     display: flex;
     text-decoration: none;
-    background-color: lightgreen;
+    overflow: scroll;
 }
 
-.list_position ul{
+.ul1 {
     padding: 0;
-    margin-left: 3%;
+    margin-top: 0;
+    margin-bottom: 0;
+    /*margin-left: 3%;*/
     list-style: none;
     display: flex;
     flex-direction: column;
-    row-gap: 5%;
 }
 
-.list_position li{
-    height: 2.6vh;
+.li1{
     font-size: 2.6vh; /*18 px*/
-    line-height: 3.1vh; /*21 px*/
+    line-height: 4.5vh; /*21 px*/
     font-family: 'Roboto', serif;
     font-weight: 400;
     color: #000000;
     resize: both;
 }
 
-.list_position li:hover{
-    font-weight: 600;
-    cursor: pointer;
+.li2{
+    margin-left: 15px;
+    font-size: 2.6vh; /*18 px*/
+    line-height: 4.5vh; /*21 px*/
+    font-family: 'Roboto', serif;
+    font-weight: 400;
+    color: #000000;
+    resize: both;
 }
 
-.list_position li:active{
+.li2:hover{
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.activeObj{
+    font-weight: 600;
+}
+
+.activeSub{
     font-weight: 600;
 }

@@ -6,6 +6,8 @@ import '../components/inputs/Inputs.css'
 import BlueButton from "../components/buttons/BlueButton";
 import GlobalHeader from "../components/headers/GlobalHeader";
 import MainBlock from "../blocks/MainBlock";
+import UploadBlock from "../blocks/UploadBlock";
+import Error from "./Error";
 
 class App extends React.Component  {
 
@@ -18,11 +20,20 @@ class App extends React.Component  {
             password: "",
             error: "",
             isAuthenticated: false,
+            display: "main"
         };
     }
 
     componentDidMount = () => {
-        this.getSession();
+        if (localStorage.getItem('username_key'))
+        {
+            this.setState({isAuthenticated: true})
+            localStorage.setItem('auth_key', 'true')
+        }
+        else
+        {
+            this.getSession();
+        }
     }
 
     getCSRF = () => {
@@ -45,13 +56,12 @@ class App extends React.Component  {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
                 if (data.isAuthenticated) {
                     this.setState({isAuthenticated: true});
-                    sessionStorage.setItem("auth_key", 'true');
+                    localStorage.setItem("auth_key", 'true');
                 } else {
                     this.setState({isAuthenticated: false});
-                    sessionStorage.setItem("auth_key", 'false');
+                    localStorage.setItem("auth_key", 'false');
                     this.getCSRF();
                 }
             })
@@ -91,11 +101,11 @@ class App extends React.Component  {
             .then((data) => {
                 console.log(data);
                 this.setState({isAuthenticated: true, username: "", password: "", error: ""});
-                sessionStorage.setItem("username_key", data.username);
-                sessionStorage.setItem("firstname_key", data.first_name);
-                sessionStorage.setItem("lastname_key", data.last_name);
-                sessionStorage.setItem("group_key", data.group);
-                sessionStorage.setItem("auth_key", 'true');
+                localStorage.setItem("username_key", data.username);
+                localStorage.setItem("firstname_key", data.first_name);
+                localStorage.setItem("lastname_key", data.last_name);
+                localStorage.setItem("group_key", data.group);
+                localStorage.setItem("auth_key", 'true');
             })
             .catch((err) => {
                 console.log(err);
@@ -111,7 +121,7 @@ class App extends React.Component  {
             .then((data) => {
                 console.log(data);
                 this.setState({isAuthenticated: false});
-                sessionStorage.clear();
+                localStorage.clear();
                 this.getCSRF();
             })
             .catch((err) => {
@@ -129,16 +139,24 @@ class App extends React.Component  {
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
-                sessionStorage.setItem("username_key", data.username);
-                sessionStorage.setItem("firstname_key", data.first_name);
-                sessionStorage.setItem("lastname_key", data.last_name);
-                sessionStorage.setItem("group_key", data.group);
+                localStorage.setItem("username_key", data.username);
+                localStorage.setItem("firstname_key", data.first_name);
+                localStorage.setItem("lastname_key", data.last_name);
+                localStorage.setItem("group_key", data.group);
             })
             .catch((err) => {
                 console.log(err);
             });
     }
 
+    onUploadItemClicked = () => {
+        this.setState({display: "upload"})
+    }
+
+
+    onHomeItemClicked = () => {
+        this.setState({display: "main"})
+    }
 
     render() {
         let error_text;
@@ -179,16 +197,34 @@ class App extends React.Component  {
             );
         }
         else {
-            return (
-                <>
-                    <GlobalHeader username={sessionStorage.getItem("username_key")}
-                                  lastname={sessionStorage.getItem("lastname_key")}
-                                  firstname={sessionStorage.getItem("firstname_key")}
-                                  group={sessionStorage.getItem("group_key")}
-                                  logout={this.logout}/>
-                    <MainBlock/>
-                </>
-            );
+            if (this.state.display === "main"){
+                return (
+                    <>
+                        <GlobalHeader username={localStorage.getItem("username_key")}
+                                      lastname={localStorage.getItem("lastname_key")}
+                                      firstname={localStorage.getItem("firstname_key")}
+                                      group={localStorage.getItem("group_key")}
+                                      logout={this.logout}
+                                      onUploadClicked={this.onUploadItemClicked}
+                                      onHomeClicked={this.onHomeItemClicked}/>
+                        <MainBlock/>
+                    </>
+                );
+            }
+            if (this.state.display === "upload"){
+                return (
+                    <>
+                        <GlobalHeader username={localStorage.getItem("username_key")}
+                                      lastname={localStorage.getItem("lastname_key")}
+                                      firstname={localStorage.getItem("firstname_key")}
+                                      group={localStorage.getItem("group_key")}
+                                      logout={this.logout}
+                                      onUploadClicked={this.onUploadItemClicked}
+                                      onHomeClicked={this.onHomeItemClicked}/>
+                        <UploadBlock/>
+                    </>
+                );
+            }
         }
     }
 }

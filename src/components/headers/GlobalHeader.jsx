@@ -3,24 +3,31 @@ import './GlobalHeader.css';
 
 import OrangeButton from "../buttons/OrangeButton";
 
-import {Link} from "react-router-dom";
+function GlobalHeader ({username, firstname, lastname, group, logout, onUploadClicked, onHomeClicked}) {
 
-const GlobalHeader = ({username, firstname, lastname, group, logout}) => {
-
-    const UploadButton = () =>{
+    const UploadButton = () => {
         return(
-            <div className={'upload'}/>
+            <div className={'upload'} onClick={onUploadClicked}/>
         )
     }
 
-    if (!lastname)
+    if (!username)
     {
-        lastname = username.charAt(0).toUpperCase() + username.slice(1)
+        username = ""
     }
 
     if (firstname)
     {
         firstname = firstname.charAt(0) + "."
+    }
+    else
+    {
+        firstname = ""
+    }
+
+    if (!lastname)
+    {
+        lastname = username.charAt(0).toUpperCase() + username.slice(1)
     }
 
     let upload_button;
@@ -45,9 +52,7 @@ const GlobalHeader = ({username, firstname, lastname, group, logout}) => {
             <div style={{ marginLeft:'auto' }}/>
             {upload_button}
             <div className={'step'}/>
-            <Link to="/">
-                <div className={'home'}/>
-            </Link>
+            <div className={'home'} onClick={onHomeClicked}/>
             <div className={'step'}/>
             <h5>
                 {lastname} {firstname}

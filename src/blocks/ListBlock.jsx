@@ -1,6 +1,6 @@
 import React from 'react';
 import './ListBlock.css';
-
+import Highlighter from 'react-highlight-words';
 
 class ListBlock extends React.Component {
 
@@ -14,7 +14,6 @@ class ListBlock extends React.Component {
         })
             .then((res) => res.json())
             .then((res) => {
-                console.log(res);
                 this.setState({objects: res});
             })
             .catch((err) => {
@@ -24,10 +23,22 @@ class ListBlock extends React.Component {
 
 
     getUniqueSubclasses() {
-        var subclasses = []
+        let subclasses = []
+        let classes = []
+        let sub = []
+
+        for (let i in this.state.objects) {
+            this.state.objects.map((output, i) => (
+                subclasses[i] = output.subcl
+            ))
+
+            this.state.objects.map((output, i) => (
+                classes[i] = output.cl
+            ))
+        }
 
         function eliminateDuplicates(arr) {
-            var i,
+            let i,
                 len = arr.length,
                 out = [],
                 obj = {};
@@ -41,26 +52,71 @@ class ListBlock extends React.Component {
             return out;
         }
 
-        for (let i in this.state.objects) {
-            this.state.objects.map((output, i) => (
-                subclasses[i] = output.subcl
-            ))
+        if (this.props.cl === 'Все')
+        {
+            return eliminateDuplicates(subclasses)
         }
-
-        return (
-            // this.state.objects.map((output, id) => (
-            //     <li key={id}>{output.name}</li>
-            // ))
-            eliminateDuplicates(subclasses)
-        );
+        else
+        {
+            for (let i = 0; i < classes.length; i++)
+            {
+                if (classes[i] === this.props.cl)
+                {
+                    sub.push(subclasses[i])
+                }
+            }
+            return eliminateDuplicates(sub)
+        }
     }
 
-    render() {
+    getFilteredSubclass(classItem){
+        return this.filterBySearch(classItem);
+    }
 
+    getFilteredObject(renderedSubclass, objectName, objectSubclass){
+        if (renderedSubclass === objectSubclass){
+            return this.filterBySearch(objectName)
+        }
+    }
+
+    filterBySearch(object){
+        if (object.toLowerCase().includes(this.props.inp.toLowerCase())){
+            return <Highlighter searchWords={[this.props.inp]} textToHighlight={object} highlightStyle={{backgroundColor: '#4DBDC2'}}/>
+        }
+    }
+
+    highlight(wholeName){
+        const regExp = new RegExp(wholeName, 'gi');
+        const matchValue = wholeName.match(regExp)
+        console.log(matchValue)
+    }
+
+    handleObjectClick(event, object){
+        this.props.obj(object);
+
+        for (const li of document.querySelectorAll('li')) {
+            li.classList.remove("activeObj");
+            li.classList.remove("activeSub");
+        }
+
+        event.currentTarget.classList.add('activeObj');
+        event.currentTarget.parentNode.classList.add('activeSub')
+    };
+
+    render() {
         return (
             <nav className="list_position">
-                <ul>
-                    <li>{this.getUniqueSubclasses()}</li>
+                <ul className="ul1">
+                    {this.getUniqueSubclasses().map((subclassItem, subclassid) =>
+                        <li key={subclassid} className="li1" >
+                            {this.getFilteredSubclass(subclassItem)}
+                            {this.state.objects.map((item, nameid) =>
+                                <li  key={nameid} className="li2" onClick={(e) => this.handleObjectClick(e, item)}>
+                                    {this.getFilteredObject(subclassItem, item.name, item.subcl)}
+                                </li>
+                            )}
+                        </li>
+                        )}
                 </ul>
             </nav>
         );
