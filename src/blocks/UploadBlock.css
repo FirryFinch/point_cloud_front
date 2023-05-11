@@ -30,6 +30,15 @@
     margin: auto;
 }
 
+.file_image{
+    background-image: url("/public/icons/file_grey.png");
+    width: 7.4vh; /*50 px*/
+    height: 7.4vh; /*50 px*/
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: auto;
+}
+
 .oops{
     font-size: 5.3vh; /*36 px*/
     line-height: 5.3vh; /*42 px*/

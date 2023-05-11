@@ -209,7 +209,10 @@ class App extends React.Component  {
                                       logout={this.logout}
                                       onUploadClicked={this.onUploadItemClicked}
                                       onHomeClicked={this.onHomeItemClicked}/>
-                        <MainBlock/>
+                        <MainBlock
+                            group={localStorage.getItem("group_key")}
+                            csrf={localStorage.getItem("csrf_key")}
+                        />
                     </>
                 );
             }
@@ -226,6 +229,7 @@ class App extends React.Component  {
                         <UploadBlock
                             user_id={localStorage.getItem("user_id_key")}
                             csrf={localStorage.getItem("csrf_key")}
+                            toMain={this.onHomeItemClicked}
                         />
                     </>
                 );

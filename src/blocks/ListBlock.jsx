@@ -100,7 +100,7 @@ class ListBlock extends React.Component {
         }
 
         event.currentTarget.classList.add('activeObj');
-        event.currentTarget.parentNode.classList.add('activeSub')
+        event.currentTarget.parentNode.parentNode.classList.add('activeSub')
     };
 
     render() {
@@ -110,11 +110,13 @@ class ListBlock extends React.Component {
                     {this.getUniqueSubclasses().map((subclassItem, subclassid) =>
                         <li key={subclassid} className="li1" >
                             {this.getFilteredSubclass(subclassItem)}
-                            {this.state.objects.map((item, nameid) =>
-                                <li  key={nameid} className="li2" onClick={(e) => this.handleObjectClick(e, item)}>
-                                    {this.getFilteredObject(subclassItem, item.name, item.subcl)}
-                                </li>
-                            )}
+                            <ul className="ul1">
+                                {this.state.objects.map((item, nameid) =>
+                                    <li  key={nameid} className="li2" onClick={(e) => this.handleObjectClick(e, item)}>
+                                        {this.getFilteredObject(subclassItem, item.name, item.subcl)}
+                                    </li>
+                                )}
+                            </ul>
                         </li>
                         )}
                 </ul>

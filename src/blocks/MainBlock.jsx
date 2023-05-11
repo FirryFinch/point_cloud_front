@@ -13,6 +13,7 @@ class MainBlock extends React.Component {
             searchInput: '',
             activeClass: 'Все',
             activeObject: '',
+            infoState: false,
         };
     }
 
@@ -22,10 +23,16 @@ class MainBlock extends React.Component {
 
     handleClassClick = (classNameValue) => {
         this.setState({activeClass: classNameValue})
+        this.setState({infoState: false})
     }
 
     handleObjectClick = (object) => {
         this.setState({activeObject: object})
+        this.setState({infoState: false})
+    }
+
+    handleInfoChange = (state) => {
+        this.setState({infoState: state})
     }
 
     render() {
@@ -50,6 +57,10 @@ class MainBlock extends React.Component {
                 <div className="right_position">
                     <ViewBlock
                         obj={this.state.activeObject}
+                        group={this.props.group}
+                        info={this.state.infoState}
+                        infchange={this.handleInfoChange}
+                        csrf={this.props.csrf}
                     />
                 </div>
             </div>

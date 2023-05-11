@@ -52,7 +52,6 @@
     height: 4.4vh; /*30 px*/
     background-repeat: no-repeat;
     background-size: contain;
-    margin-left: auto;
     margin-right: 2.9vh; /*20 px*/
     background-color: white;
     border: 0.4vh solid #4DBDC2; /*3 px*/
@@ -68,11 +67,116 @@
     border: 0.4vh solid #4DBDC2; /*3 px*/
 }
 
-.info:hover, .download:hover{
+.edit{
+    background-image: url("/public/icons/edit_black.png");
+    width: 4.4vh; /*30 px*/
+    height: 4.4vh; /*30 px*/
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-right: 2.9vh; /*20 px*/
+    background-color: white;
+    border: 0.4vh solid #4DBDC2; /*3 px*/
+}
+
+.save{
+    background-image: url("/public/icons/ok_white.png");
+    width: 4.4vh; /*30 px*/
+    height: 4.4vh; /*30 px*/
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-right: 2.9vh; /*20 px*/
+    background-color: #159947;
+    border: 0.4vh solid #159947; /*3 px*/
+}
+
+.trash{
+    background-image: url("/public/icons/trash_black.png");
+    width: 4.4vh; /*30 px*/
+    height: 4.4vh; /*30 px*/
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: white;
+    margin-left: 2.9vh; /*20 px*/
+    border: 0.4vh solid #4DBDC2; /*3 px*/
+}
+
+.info:hover, .download:hover, .edit:hover, .trash:hover{
     background-color: #F1FAFA;
     cursor: pointer;
 }
 
 .spaceFont{
     height: 2.6vh;
+}
+
+.activeInfo{
+    background-image: url("/public/icons/info_white.png");
+    width: 4.4vh; /*30 px*/
+    height: 4.4vh; /*30 px*/
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-right: 2.9vh; /*20 px*/
+    background-color: #4DBDC2;
+    border: 0.4vh solid #4DBDC2; /*3 px*/
+}
+
+.activeInfo:hover{
+    cursor: pointer;
+    background-color: #4DBDC2;
+}
+
+.delete{
+    background-image: url("/public/icons/cancel_white.png");
+    width: 4.4vh; /*30 px*/
+    height: 4.4vh; /*30 px*/
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-right: 2.9vh; /*20 px*/
+    background-color: #EC6442;
+    border: 0.4vh solid #EC6442; /*3 px*/
+}
+
+.delete:hover{
+    cursor: pointer;
+    background-color: #EC6442;
+}
+
+.infoForm{
+    background-color: white;
+    border: 0.4vh solid #4DBDC2; /*3 px*/
+    margin: 2%;
+    padding: 3%;
+    overflow-y: auto;
+    height: 67.4vh;
+}
+
+.infoGroup {
+    display: flex;
+    height: 5vh;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+}
+
+.infoGroup > input {
+    box-sizing: border-box;
+    width: calc(70% - (1 - 1/2)*1%);
+}
+
+.infoGroup > select {
+    box-sizing: border-box;
+    width: calc(70% - (1 - 1/2)*1%);
+}
+
+.infoInput{
+    border: 0.2vh solid #C4C4C4; /*2 px*/;
+    padding-left: 1%;
+    font-size: 2.6vh; /*18 px*/
+    line-height: 3.1vh; /*21 px*/
+    font-family: 'Roboto', serif;
+    font-weight: 400;
+    resize: both;
+    height: 5vh;
 }

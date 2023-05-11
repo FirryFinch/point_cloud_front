@@ -5,7 +5,7 @@ import './UploadBlock.css';
 import BlueButton from "../components/buttons/BlueButton";
 import RedButton from "../components/buttons/RedButton";
 
-const UploadBlock = ({user_id, csrf}) => {
+const UploadBlock = ({user_id, csrf, toMain}) => {
 
     const [drag, setDrag] = useState('false');
 
@@ -48,11 +48,10 @@ const UploadBlock = ({user_id, csrf}) => {
 
         event.preventDefault()
 
-        setFile(event.dataTransfer.files[0])
-
-        if (splitter(file.name) === 'las'){
+        if (splitter(event.dataTransfer.files[0].name) === 'las'){
             setDrag('form')
             getSubclassesList()
+            setFile(event.dataTransfer.files[0])
         }
         else
         {
@@ -74,6 +73,7 @@ const UploadBlock = ({user_id, csrf}) => {
 
     function uploadAgain(){
         setDrag('false')
+        setFile('')
     }
 
     const handleNumericLength = event => {
@@ -118,6 +118,9 @@ const UploadBlock = ({user_id, csrf}) => {
             credentials: "include",
             body: formData
         })
+            .then((data) => {
+                setDrag('success')
+            })
             .catch((err) => {
                 console.log(err);
             });
@@ -132,7 +135,9 @@ const UploadBlock = ({user_id, csrf}) => {
                          onDragOver={event => dragStartHandler(event)}
                          onDrop={event => onDropHandler(event)}>
                         <div className="upload_child">
-                            Отпустите файлы для загрузки
+                            <div className="file_image"/>
+                            <div className="space20"/>
+                            Отпустите файл для загрузки
                         </div>
                     </div>
                 }
@@ -146,7 +151,7 @@ const UploadBlock = ({user_id, csrf}) => {
                         <div className="upload_child">
                             <div className="upload_image"/>
                             <div className="space20"/>
-                            Перетащите файлы в это поле или нажмите на иконку, чтобы выбрать файлы
+                            Перетащите файл в это поле или нажмите на иконку, чтобы выбрать файл
                         </div>
                         <input type='file' id='file' style={{display: "none"}} ref={inputFile} onChange={uploadClickHandler} accept=".las"/>
                     </div>
@@ -169,7 +174,7 @@ const UploadBlock = ({user_id, csrf}) => {
                             <form onSubmit={handleFormSubmit}>
                                 <label>Название</label>
                                 <br></br>
-                                <input className={'formInput'} name='fname'></input>
+                                <input maxLength="50" className={'formInput'} name='fname'></input>
                                 <br></br>
                                 <div className={'space20'}/>
 
@@ -183,30 +188,30 @@ const UploadBlock = ({user_id, csrf}) => {
 
                                 <label>Длина</label>
                                 <br></br>
-                                <input className={'formInput'} name='flength' value={numericLength} onChange={handleNumericLength}></input>
+                                <input maxLength="6" className={'formInput'} name='flength' value={numericLength} onChange={handleNumericLength}></input>
                                 <br></br>
                                 <div className={'space20'}/>
 
                                 <label>Ширина</label>
                                 <br></br>
-                                <input className={'formInput'} name='fwidth' value={numericWidth} onChange={handleNumericWidth}></input>
+                                <input maxLength="6" className={'formInput'} name='fwidth' value={numericWidth} onChange={handleNumericWidth}></input>
                                 <br></br>
                                 <div className={'space20'}/>
 
                                 <label>Высота</label>
                                 <br></br>
-                                <input className={'formInput'} name='fheight' value={numericHeight} onChange={handleNumericHeight}></input>
+                                <input maxLength="6" className={'formInput'} name='fheight' value={numericHeight} onChange={handleNumericHeight}></input>
                                 <br></br>
                                 <div className={'space20'}/>
 
                                 <label>Номер аудитории</label>
                                 <br></br>
-                                <input className={'formInput'} name='fnum' value={numericNum} onChange={handleNumericNum}></input>
+                                <input maxLength="5" className={'formInput'} name='fnum' value={numericNum} onChange={handleNumericNum}></input>
                                 <br></br>
                                 <div className={'space20'}/>
                                 <div className={'space20'}/>
                                 <div style={{textAlign: 'center', display:'flex'}}>
-                                    <BlueButton type="submit" style={{width: '60%', margin: 'auto'}}>Загрузить</BlueButton>
+                                    <BlueButton type="submit" style={{width: '60%', margin: 'auto'}}>Сохранить</BlueButton>
                                 </div>
                             </form>
                             <div className={'space20'}/>
@@ -229,6 +234,21 @@ const UploadBlock = ({user_id, csrf}) => {
                             </div>
                             <div className={'space40'}/>
                             <BlueButton style={{width: '30%'}} onClick={uploadAgain}>Загрузить снова</BlueButton>
+                        </div>
+                    </div>
+                }
+                {drag === 'success' &&
+                    <div className="upload_parent">
+                        <div className="upload_child" style={{textAlign: 'center'}}>
+                            <div className={'oops'}>
+                                Успех!
+                            </div>
+                            <div className={'space40'}/>
+                            <div className={'error'}>
+                                Объект был успешно добавлен ✅
+                            </div>
+                            <div className={'space40'}/>
+                            <BlueButton style={{width: '50%'}} onClick={toMain}>На главную</BlueButton>
                         </div>
                     </div>
                 }
