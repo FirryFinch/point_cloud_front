@@ -183,3 +183,12 @@
     resize: both;
     height: 5vh;
 }
+
+.noviewimage{
+    background-image: url("/public/icons/noview.png");
+    width: 7.4vh; /*50 px*/
+    height: 7.4vh; /*50 px*/
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: auto;
+}

@@ -258,7 +258,7 @@ class ViewBlock extends React.Component  {
                             <div className="trash" onClick={() => {if(window.confirm('Вы действительно хотите удалить объект ' + this.props.obj.name + '?')){this.trashHandler(this.props.obj.id)}}}/>
                         }
                     </div>
-                    {this.props.info === false &&
+                    {this.props.info === false && this.x_array.length < 16000 &&
                     <div className="plot">
                         <Plot
                             data={this.traces}
@@ -286,6 +286,17 @@ class ViewBlock extends React.Component  {
                                 }}
                         />
                     </div>
+                    }
+                    {this.props.info === false && this.x_array.length > 16000 &&
+                       <>
+                           <div className="choose_parent" style={{height: '71vh'}}>
+                               <div className="choose_child">
+                                   <div className="noviewimage"/>
+                                   <div className="space20"/>
+                                   Предпросмотр недоступен, слишком большое количество точек
+                               </div>
+                           </div>
+                       </>
                     }
                     {this.props.info === true &&
                         <form id="changeform" onSubmit={(event) => {if(window.confirm('Сохранить свойства для объекта ' + this.props.obj.name + '?')){this.handleSave(event, this.props.obj.id)}}} className="infoForm">
