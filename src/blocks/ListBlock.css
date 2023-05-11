@@ -10,7 +10,8 @@ body{
     height: 61vh;
     display: flex;
     text-decoration: none;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .ul1 {

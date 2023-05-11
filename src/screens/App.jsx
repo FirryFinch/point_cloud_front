@@ -20,7 +20,7 @@ class App extends React.Component  {
             password: "",
             error: "",
             isAuthenticated: false,
-            display: "main"
+            display: "main",
         };
     }
 
@@ -42,8 +42,8 @@ class App extends React.Component  {
         })
             .then((res) => {
                 let csrfToken = res.headers.get("X-CSRFToken");
-                this.setState({csrf: csrfToken});
-                console.log(csrfToken);
+                this.setState({csrf: csrfToken})
+                localStorage.setItem("csrf_key", csrfToken);
             })
             .catch((err) => {
                 console.log(err);
@@ -101,11 +101,13 @@ class App extends React.Component  {
             .then((data) => {
                 console.log(data);
                 this.setState({isAuthenticated: true, username: "", password: "", error: ""});
+                localStorage.setItem("user_id_key", data.user_id);
                 localStorage.setItem("username_key", data.username);
                 localStorage.setItem("firstname_key", data.first_name);
                 localStorage.setItem("lastname_key", data.last_name);
                 localStorage.setItem("group_key", data.group);
                 localStorage.setItem("auth_key", 'true');
+                this.getCSRF()
             })
             .catch((err) => {
                 console.log(err);
@@ -221,7 +223,10 @@ class App extends React.Component  {
                                       logout={this.logout}
                                       onUploadClicked={this.onUploadItemClicked}
                                       onHomeClicked={this.onHomeItemClicked}/>
-                        <UploadBlock/>
+                        <UploadBlock
+                            user_id={localStorage.getItem("user_id_key")}
+                            csrf={localStorage.getItem("csrf_key")}
+                        />
                     </>
                 );
             }

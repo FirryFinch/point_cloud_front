@@ -15,8 +15,8 @@
 
 .object_image{
     background-image: url("/public/icons/object_grey.png");
-    width: 4.4vh; /*30 px*/
-    height: 4.4vh; /*30 px*/
+    width: 7.4vh; /*50 px*/
+    height: 7.4vh; /*50 px*/
     background-repeat: no-repeat;
     background-size: contain;
     margin: auto;

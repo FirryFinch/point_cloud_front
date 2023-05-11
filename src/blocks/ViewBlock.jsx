@@ -44,15 +44,16 @@ class ViewBlock extends React.Component  {
     });
 
     render() {
-        if (this.props.obj.file_data)
+        if (this.props.obj.file_data_x)
         {
             this.x_array.splice(0, this.x_array.length)
             this.y_array.splice(0, this.y_array.length)
             this.z_array.splice(0, this.z_array.length)
-            for(let i = 0; i < this.props.obj.file_data.length; i++){
-                this.x_array[i] = this.props.obj.file_data[i][0];
-                this.y_array[i] = this.props.obj.file_data[i][1];
-                this.z_array[i] = this.props.obj.file_data[i][2];
+
+            for(let i = 0; i < this.props.obj.file_data_x.length; i++){
+                this.x_array[i] = this.props.obj.file_data_x[i];
+                this.y_array[i] = this.props.obj.file_data_y[i];
+                this.z_array[i] = this.props.obj.file_data_z[i];
             }
 
             return(
