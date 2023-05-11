@@ -174,14 +174,17 @@ const UploadBlock = ({user_id, csrf, toMain}) => {
                             <form onSubmit={handleFormSubmit}>
                                 <label>Название</label>
                                 <br></br>
-                                <input maxLength="50" className={'formInput'} name='fname'></input>
+                                <input
+                                    maxLength="50"
+                                    className={'formInput'}
+                                    name='fname'></input>
                                 <br></br>
                                 <div className={'space20'}/>
 
                                 <label>Подкласс</label>
                                 <br></br>
-                                <select className={'formInput'} name='fsubcl'>
-                                    {subclasses.map(({ id, title }) => <option value={id}>{title}</option>)}
+                                <select name='fsubcl'>
+                                    {subclasses.map(({ id, title }) => <option key={id} value={id}>{title}</option>)}
                                 </select>
                                 <br></br>
                                 <div className={'space20'}/>

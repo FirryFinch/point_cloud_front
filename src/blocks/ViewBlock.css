@@ -89,6 +89,10 @@
     border: 0.4vh solid #159947; /*3 px*/
 }
 
+.save:hover{
+    cursor: pointer;
+}
+
 .trash{
     background-image: url("/public/icons/trash_black.png");
     width: 4.4vh; /*30 px*/
@@ -138,7 +142,6 @@
 
 .delete:hover{
     cursor: pointer;
-    background-color: #EC6442;
 }
 
 .infoForm{

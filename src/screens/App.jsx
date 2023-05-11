@@ -25,14 +25,21 @@ class App extends React.Component  {
     }
 
     componentDidMount = () => {
-        if (localStorage.getItem('username_key'))
+        if(!localStorage.getItem('csrf_key'))
         {
-            this.setState({isAuthenticated: true})
-            localStorage.setItem('auth_key', 'true')
+            this.getSession();
         }
         else
         {
-            this.getSession();
+            if (localStorage.getItem('username_key'))
+            {
+                this.setState({isAuthenticated: true})
+                localStorage.setItem('auth_key', 'true')
+            }
+            else
+            {
+                this.getSession();
+            }
         }
     }
 
