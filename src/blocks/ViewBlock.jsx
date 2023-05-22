@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import moment from "moment";
 
 import './ViewBlock.css';
 import '../General.css'
 
 import Plot from 'react-plotly.js'
-
 
 class ViewBlock extends React.Component  {
 
@@ -25,11 +24,6 @@ class ViewBlock extends React.Component  {
             numericHeight: this.props.obj.height,
             numericNum: this.props.obj.num
         };
-    }
-
-    componentDidMount() {
-        this.getClassesList()
-        this.getSubclassesList()
     }
 
     x_array = []
@@ -59,6 +53,11 @@ class ViewBlock extends React.Component  {
                 },
         };
     });
+
+    componentDidMount() {
+        this.getClassesList()
+        this.getSubclassesList()
+    }
 
     handleInfo (event) {
         if (this.props.info === true)
@@ -203,25 +202,31 @@ class ViewBlock extends React.Component  {
             });
     }
 
+    cleanArrays(){
+        this.x_array.splice(0, this.x_array.length)
+        this.y_array.splice(0, this.y_array.length)
+        this.z_array.splice(0, this.z_array.length)
+    }
+
+    fillArrays(){
+        for (let i = 0; i < this.props.obj.file_data_x.length; i++) {
+            this.x_array[i] = this.props.obj.file_data_x[i];
+            this.y_array[i] = this.props.obj.file_data_y[i];
+            this.z_array[i] = this.props.obj.file_data_z[i];
+        }
+    }
+
     render() {
-        if (this.props.obj.file_data_x)
+        if (this.props.obj)
         {
-            this.x_array.splice(0, this.x_array.length)
-            this.y_array.splice(0, this.y_array.length)
-            this.z_array.splice(0, this.z_array.length)
-
-            for(let i = 0; i < this.props.obj.file_data_x.length; i++){
-                this.x_array[i] = this.props.obj.file_data_x[i];
-                this.y_array[i] = this.props.obj.file_data_y[i];
-                this.z_array[i] = this.props.obj.file_data_z[i];
-            }
-
+            this.cleanArrays();
+            this.fillArrays();
             return(
                 <>
                     <div className="spaceFont"/>
                     <div className="header">
                         <div className="name_text">
-                            {this.props.obj.name}
+                            {this.props.obj.name} ({this.x_array.length} точек)
                         </div>
                         {this.props.info === true &&
                             <>
@@ -259,7 +264,7 @@ class ViewBlock extends React.Component  {
                             <div className="trash" onClick={() => {if(window.confirm('Вы действительно хотите удалить объект ' + this.props.obj.name + '?')){this.trashHandler(this.props.obj.id)}}}/>
                         }
                     </div>
-                    {this.props.info === false && this.x_array.length < 16000 &&
+                    {this.props.info === false && this.x_array.length < 20000 &&
                     <div className="plot">
                         <Plot
                             data={this.traces}
@@ -288,7 +293,7 @@ class ViewBlock extends React.Component  {
                         />
                     </div>
                     }
-                    {this.props.info === false && this.x_array.length > 16000 &&
+                    {this.props.info === false && this.x_array.length > 20000 &&
                        <>
                            <div className="choose_parent" style={{height: '71vh'}}>
                                <div className="choose_child">
@@ -448,9 +453,6 @@ class ViewBlock extends React.Component  {
         }
         else
         {
-            this.x_array.splice(0, this.x_array.length)
-            this.y_array.splice(0, this.y_array.length)
-            this.z_array.splice(0, this.z_array.length)
             return(
                 <div className="choose_parent">
                     <div className="choose_child">
