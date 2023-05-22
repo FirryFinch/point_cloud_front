@@ -175,6 +175,7 @@ class ViewBlock extends React.Component  {
 
     handleSave = (event, objid) =>
     {
+        window.location.reload();
         fetch("api/objects/", {
             method: "PUT",
             headers: {
