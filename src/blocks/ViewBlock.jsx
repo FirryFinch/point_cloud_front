@@ -5,8 +5,10 @@ import './ViewBlock.css';
 import '../General.css'
 
 import Plot from 'react-plotly.js'
+import {ScatterGL} from "scatter-gl";
+import PlotBlock from "./PlotBlock";
 
-class ViewBlock extends React.Component  {
+class ViewBlock extends React.Component {
 
     constructor(props) {
         super(props);
@@ -22,7 +24,7 @@ class ViewBlock extends React.Component  {
             numericLength: this.props.obj.length,
             numericWidth: this.props.obj.width,
             numericHeight: this.props.obj.height,
-            numericNum: this.props.obj.num
+            numericNum: this.props.obj.num,
         };
     }
 
@@ -217,148 +219,126 @@ class ViewBlock extends React.Component  {
     }
 
     render() {
+
         if (this.props.obj)
         {
             this.cleanArrays();
             this.fillArrays();
-            return(
-                <>
-                    <div className="spaceFont"/>
-                    <div className="header">
-                        <div className="name_text">
-                            {this.props.obj.name} ({this.x_array.length} точек)
-                        </div>
-                        {this.props.info === true &&
-                            <>
-                                {this.state.edit === true &&
+        }
+
+        return (
+            <>
+                {
+                    this.props.obj &&
+                    <>
+                        <div className="spaceFont"/>
+                        <div className="header">
+                            <div className="name_text">{this.props.obj.name} ({this.x_array.length} точек)</div>
+                            {
+                                this.props.info === true &&
                                 <>
-                                    <button className="save" form="changeform" type="submit" style={{marginLeft: "auto"}}/>
-                                    <div className="delete" onClick={(e) => this.handleEdit(e)}/>
-                                    <div className="activeInfo" onClick={(e) => this.handleInfo(e)}/>
-                                </>
-                                }
-                                {this.state.edit === false &&
-                                    <>
-                                        {this.props.group === "admin" &&
+                                    {
+                                        this.state.edit === true &&
+                                        <>
+                                            <button className="save" form="changeform" type="submit" style={{marginLeft: "auto"}}/>
+                                            <div className="delete" onClick={(e) => this.handleEdit(e)}/>
+                                            <div className="activeInfo" onClick={(e) => this.handleInfo(e)}/>
+                                        </>
+                                    }
+
+                                    {
+                                        this.state.edit === false &&
+                                        <>
+                                            {
+                                                this.props.group === "admin" &&
                                                 <>
                                                     <div className="edit" style={{marginLeft: "auto"}} onClick={(e) => this.handleEdit(e)}/>
                                                     <div className="activeInfo" onClick={(e) => this.handleInfo(e)}/>
                                                 </>
-                                        }
-                                        {this.props.group === "user" &&
-                                            <>
-                                                <div className="activeInfo" style={{marginLeft: "auto"}} onClick={(e) => this.handleInfo(e)}/>
-                                            </>
-                                        }
-                                    </>
-                                }
-                            </>
-                        }
-                        {this.props.info === false &&
-                            <>
-                                <div className="info" style={{marginLeft: "auto"}} onClick={(e) => this.handleInfo(e)}/>
-                            </>
-                        }
-                        <div className="download" onClick={() => {window.location = this.props.obj.file_url}}/>
-                        {this.props.group === "admin" &&
-                            <div className="trash" onClick={() => {if(window.confirm('Вы действительно хотите удалить объект ' + this.props.obj.name + '?')){this.trashHandler(this.props.obj.id)}}}/>
-                        }
-                    </div>
-                    {this.props.info === false && this.x_array.length < 20000 &&
-                    <div className="plot">
-                        <Plot
-                            data={this.traces}
-                            layout=
-                                {{
-                                    paper_bgcolor: '#F7F7F9',
-                                    height: 480,
-                                    width: 670,
-                                    font:
-                                        {
-                                            family: 'Roboto, serif',
-                                            size: 14
-                                        },
-                                    margin:
-                                        {
-                                            b: 20,
-                                            l: 20,
-                                            r: 20,
-                                            t: 20,
-                                        }
-                                }}
-                            config=
-                                {{
-                                    displayModeBar: false
-                                }}
-                        />
-                    </div>
-                    }
-                    {this.props.info === false && this.x_array.length > 20000 &&
-                       <>
-                           <div className="choose_parent" style={{height: '71vh'}}>
-                               <div className="choose_child">
-                                   <div className="noviewimage"/>
-                                   <div className="space20"/>
-                                   Предпросмотр недоступен, слишком большое количество точек
-                               </div>
-                           </div>
-                       </>
-                    }
-                    {this.props.info === true &&
-                        <form id="changeform" onSubmit={(event) => {if(window.confirm('Сохранить свойства для объекта ' + this.props.obj.name + '?')){this.handleSave(event, this.props.obj.id)}}} className="infoForm">
-
-                            <div className="infoGroup">
-                                <label style={{color: 'black'}}>Название</label>
-                                <input
-                                    maxLength="50"
-                                    disabled={!this.state.edit}
-                                    className="infoInput"
-                                    value={this.state.letterName}
-                                    name='ename'
-                                    onChange={this.handleLetterName}/>
-                            </div>
-
-                            <div className="space20"/>
-
-                            <div className="infoGroup">
-                                <label style={{color: 'black'}}>Класс</label>
-                                <select
-                                    disabled={!this.state.edit}
-                                    style={{height: '5vh'}}
-                                    className="infoInput"
-                                    name='ecl'
-                                    value={this.state.firstSelectOption}
-                                    onChange={this.handleFirstSelectChange}>
-                                    {
-                                        this.state.classes.map(({ id, title }) =>
-                                        {
-                                            if (this.props.obj.cl === title)
-                                            {
-                                                return(<option selected key={id}>{title}</option>);
                                             }
-                                            else
-                                            {
 
-                                                return(<option key={id}>{title}</option>);
+                                            {
+                                                this.props.group === "user" &&
+                                                <>
+                                                    <div className="activeInfo" style={{marginLeft: "auto"}} onClick={(e) => this.handleInfo(e)}/>
+                                                </>
                                             }
-                                        })
+                                        </>
                                     }
-                                </select>
-                            </div>
+                                </>
+                            }
 
-                            <div className="space20"/>
+                            {
+                                this.props.info === false &&
+                                <>
+                                    <div className="info" style={{marginLeft: "auto"}} onClick={(e) => this.handleInfo(e)}/>
+                                </>
+                            }
 
-                            <div className="infoGroup">
-                                <label style={{color: 'black'}}>Подкласс</label>
-                                <select
-                                    disabled={!this.state.edit}
-                                    style={{height: '5vh'}}
-                                    className="infoInput"
-                                    name='esubcl'
-                                    value={this.state.secondSelectOption}
-                                    onChange={this.handleSecondSelectChange}>
-                                    {
-                                        this.state.subclasses.map(({ id, title, cl }) =>
+                            <div className="download" onClick={() => {window.location = this.props.obj.file_url}}/>
+
+                            {
+                                this.props.group === "admin" &&
+                                <div className="trash" onClick={() => {if(window.confirm('Вы действительно хотите удалить объект ' + this.props.obj.name + '?')){this.trashHandler(this.props.obj.id)}}}/>
+                            }
+                        </div>
+
+                        {
+                            this.props.info === true &&
+                            <form id="changeform" onSubmit={(event) => {if(window.confirm('Сохранить свойства для объекта ' + this.props.obj.name + '?')){this.handleSave(event, this.props.obj.id)}}} className="infoForm">
+
+                                <div className="infoGroup">
+                                    <label style={{color: 'black'}}>Название</label>
+                                    <input
+                                        maxLength="50"
+                                        disabled={!this.state.edit}
+                                        className="infoInput"
+                                        value={this.state.letterName}
+                                        name='ename'
+                                        onChange={this.handleLetterName}/>
+                                </div>
+
+                                <div className="space20"/>
+
+                                <div className="infoGroup">
+                                    <label style={{color: 'black'}}>Класс</label>
+                                    <select
+                                        disabled={!this.state.edit}
+                                        style={{height: '5vh'}}
+                                        className="infoInput"
+                                        name='ecl'
+                                        value={this.state.firstSelectOption}
+                                        onChange={this.handleFirstSelectChange}>
+                                        {
+                                            this.state.classes.map(({ id, title }) =>
+                                            {
+                                                if (this.props.obj.cl === title)
+                                                {
+                                                    return(<option selected key={id}>{title}</option>);
+                                                }
+                                                else
+                                                {
+
+                                                    return(<option key={id}>{title}</option>);
+                                                }
+                                            })
+                                        }
+                                    </select>
+                                </div>
+
+                                <div className="space20"/>
+
+                                <div className="infoGroup">
+                                    <label style={{color: 'black'}}>Подкласс</label>
+                                    <select
+                                        disabled={!this.state.edit}
+                                        style={{height: '5vh'}}
+                                        className="infoInput"
+                                        name='esubcl'
+                                        value={this.state.secondSelectOption}
+                                        onChange={this.handleSecondSelectChange}>
+                                        {
+                                            this.state.subclasses.map(({ id, title, cl }) =>
                                             {
                                                 if (cl === this.state.firstSelectOption)
                                                 {
@@ -372,97 +352,143 @@ class ViewBlock extends React.Component  {
                                                     }
                                                 }
                                             })
-                                    }
-                                </select>
-                            </div>
+                                        }
+                                    </select>
+                                </div>
 
-                            <div className="space20"/>
+                                <div className="space20"/>
 
-                            <div className="infoGroup">
-                                <label style={{color: 'black'}}>Длина</label>
-                                <input
-                                    maxLength="6"
-                                    disabled={!this.state.edit}
-                                    className="infoInput"
-                                    name='elength'
-                                    value={this.state.numericLength}
-                                    onChange={this.handleNumericLength}/>
-                            </div>
+                                <div className="infoGroup">
+                                    <label style={{color: 'black'}}>Длина</label>
+                                    <input
+                                        maxLength="6"
+                                        disabled={!this.state.edit}
+                                        className="infoInput"
+                                        name='elength'
+                                        value={this.state.numericLength}
+                                        onChange={this.handleNumericLength}/>
+                                </div>
 
-                            <div className="space20"/>
+                                <div className="space20"/>
 
-                            <div className="infoGroup">
-                                <label style={{color: 'black'}}>Ширина</label>
-                                <input
-                                    maxLength="6"
-                                    disabled={!this.state.edit}
-                                    className="infoInput"
-                                    value={this.state.numericWidth}
-                                    name='ewidth'
-                                    onChange={this.handleNumericWidth}
+                                <div className="infoGroup">
+                                    <label style={{color: 'black'}}>Ширина</label>
+                                    <input
+                                        maxLength="6"
+                                        disabled={!this.state.edit}
+                                        className="infoInput"
+                                        value={this.state.numericWidth}
+                                        name='ewidth'
+                                        onChange={this.handleNumericWidth}
                                     />
-                            </div>
+                                </div>
 
+                                <div className="space20"/>
+
+                                <div className="infoGroup">
+                                    <label style={{color: 'black'}}>Высота</label>
+                                    <input
+                                        maxLength="6"
+                                        disabled={!this.state.edit}
+                                        className="infoInput"
+                                        value={this.state.numericHeight}
+                                        name='eheight'
+                                        onChange={this.handleNumericHeight}/>
+                                </div>
+
+                                <div className="space20"/>
+
+                                <div className="infoGroup">
+                                    <label style={{color: 'black'}}>Номер аудитории</label>
+                                    <input
+                                        maxLength="5"
+                                        disabled={!this.state.edit}
+                                        className="infoInput"
+                                        value={this.state.numericNum}
+                                        name='enum'
+                                        onChange={this.handleNumericNum}/>
+                                </div>
+
+                                <div className="space20"/>
+
+                                <div className="infoGroup">
+                                    <label style={{color: 'black'}}>Дата добавления</label>
+                                    <input
+                                        disabled className="infoInput"
+                                        value={moment(this.props.obj.time_create).format('DD.MM.YYYY, HH:mm:ss')}/>
+                                </div>
+
+                                <div className="space20"/>
+
+                                <div className="infoGroup">
+                                    <label style={{color: 'black'}}>Добавил</label>
+                                    <input
+                                        disabled className="infoInput"
+                                        value={(this.props.obj.created_by_last_name + ' ' + this.props.obj.created_by_first_name + ' (' + this.props.obj.created_by_username + ')')}/>
+                                </div>
+                            </form>
+                        }
+                        {
+                            this.props.info === false &&
+                            <>
+                                {/*<PlotBlock*/}
+                                {/*    data={this.props.obj.file_data_xyz}*/}
+                                {/*/>*/}
+
+                                <Plot
+                                    data={this.traces}
+                                    layout=
+                                        {{
+                                            paper_bgcolor: '#F7F7F9',
+                                            height: 455,
+                                            width: 647,
+                                            font:
+                                                {
+                                                    family: 'Roboto, serif',
+                                                    size: 14
+                                                },
+                                            margin:
+                                                {
+                                                    b: 20,
+                                                    l: 20,
+                                                    r: 20,
+                                                    t: 20,
+                                                }
+                                        }}
+                                    config=
+                                        {{
+                                            displayModeBar: false
+                                        }}
+                                />
+                            </>
+                        }
+                    </>
+                }
+                {
+                    !this.props.obj &&
+                    <div className="choose_parent">
+                        <div className="choose_child">
+                            <div className="object_image"/>
                             <div className="space20"/>
-
-                            <div className="infoGroup">
-                                <label style={{color: 'black'}}>Высота</label>
-                                <input
-                                    maxLength="6"
-                                    disabled={!this.state.edit}
-                                    className="infoInput"
-                                    value={this.state.numericHeight}
-                                    name='eheight'
-                                    onChange={this.handleNumericHeight}/>
-                            </div>
-
-                            <div className="space20"/>
-
-                            <div className="infoGroup">
-                                <label style={{color: 'black'}}>Номер аудитории</label>
-                                <input
-                                    maxLength="5"
-                                    disabled={!this.state.edit}
-                                    className="infoInput"
-                                    value={this.state.numericNum}
-                                    name='enum'
-                                    onChange={this.handleNumericNum}/>
-                            </div>
-
-                            <div className="space20"/>
-
-                            <div className="infoGroup">
-                                <label style={{color: 'black'}}>Дата добавления</label>
-                                <input
-                                    disabled className="infoInput"
-                                    value={moment(this.props.obj.time_create).format('DD.MM.YYYY, HH:mm:ss')}/>
-                            </div>
-
-                            <div className="space20"/>
-
-                            <div className="infoGroup">
-                                <label style={{color: 'black'}}>Добавил</label>
-                                <input
-                                    disabled className="infoInput"
-                                    value={(this.props.obj.created_by_last_name + ' ' + this.props.obj.created_by_first_name + ' (' + this.props.obj.created_by_username + ')')}/>
-                            </div>
-                        </form>
-                    }
-                </>
-            )
-        }
-        else
-        {
-            return(
-                <div className="choose_parent">
-                    <div className="choose_child">
-                        <div className="object_image"/>
-                        <div className="space20"/>
-                        Выберите объект для отображения...
+                            Выберите объект для отображения...
+                        </div>
                     </div>
-                </div>
-            )
+                }
+
+
+                {this.props.info === false && this.x_array.length > 20000 &&
+                    <>
+                        <div className="choose_parent" style={{height: '71vh'}}>
+                            <div className="choose_child">
+                                <div className="noviewimage"/>
+                                <div className="space20"/>
+                                Предпросмотр недоступен, слишком большое количество точек
+                            </div>
+                        </div>
+                    </>
+                }
+            </>
+        );
         }
-    }
 }
 export default ViewBlock;
