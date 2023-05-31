@@ -5,8 +5,7 @@ import './ViewBlock.css';
 import '../General.css'
 
 import Plot from 'react-plotly.js'
-import {ScatterGL} from "scatter-gl";
-import PlotBlock from "./PlotBlock";
+// import {ScatterGL} from "scatter-gl";
 
 class ViewBlock extends React.Component {
 
@@ -32,7 +31,7 @@ class ViewBlock extends React.Component {
     y_array= []
     z_array= []
 
-    traces = Array(1).fill(0).map((_, i) => {
+    traces = Array(1).fill(0).map((_) => {
         return {
             x: this.x_array,
             y: this.y_array,
@@ -61,7 +60,7 @@ class ViewBlock extends React.Component {
         this.getSubclassesList()
     }
 
-    handleInfo (event) {
+    handleInfo () {
         if (this.props.info === true)
         {
             this.props.infchange(false)
@@ -76,7 +75,7 @@ class ViewBlock extends React.Component {
         }
     }
 
-    handleEdit (event) {
+    handleEdit () {
         if (this.state.edit === true)
         {
             this.setState({edit: false})
@@ -123,7 +122,7 @@ class ViewBlock extends React.Component {
             credentials: "include",
             body: JSON.stringify({id: objid}),
         })
-            .then((data) => {
+            .then(() => {
                 window.location.reload();
             })
             .catch((err) => {
@@ -218,9 +217,21 @@ class ViewBlock extends React.Component {
         }
     }
 
+    // SCATTER-GL
+    // использовать с file_data_xyz
+    //
+    // scat;
+    // ds;
+    //
+    // renderContent(){
+    // this.ds = new ScatterGL.Dataset(this.props.obj.file_data_xyz);
+    // this.scat = new ScatterGL(document.getElementById('right'));
+    //     this.scat.render(this.ds)
+    // }
+
     render() {
 
-        if (this.props.obj)
+        if ((this.props.obj) && (this.props.info === false))
         {
             this.cleanArrays();
             this.fillArrays();
@@ -233,7 +244,7 @@ class ViewBlock extends React.Component {
                     <>
                         <div className="spaceFont"/>
                         <div className="header">
-                            <div className="name_text">{this.props.obj.name} ({this.x_array.length} точек)</div>
+                            <div className="name_text">{this.props.obj.name}</div>
                             {
                                 this.props.info === true &&
                                 <>
@@ -351,6 +362,7 @@ class ViewBlock extends React.Component {
                                                         return(<option key={id}>{title}</option>);
                                                     }
                                                 }
+                                                return null;
                                             })
                                         }
                                     </select>
@@ -429,12 +441,8 @@ class ViewBlock extends React.Component {
                             </form>
                         }
                         {
-                            this.props.info === false &&
+                            this.props.info === false && this.x_array.length < 16000 &&
                             <>
-                                {/*<PlotBlock*/}
-                                {/*    data={this.props.obj.file_data_xyz}*/}
-                                {/*/>*/}
-
                                 <Plot
                                     data={this.traces}
                                     layout=
@@ -453,7 +461,7 @@ class ViewBlock extends React.Component {
                                                     l: 20,
                                                     r: 20,
                                                     t: 20,
-                                                }
+                                                },
                                         }}
                                     config=
                                         {{
@@ -476,7 +484,7 @@ class ViewBlock extends React.Component {
                 }
 
 
-                {this.props.info === false && this.x_array.length > 20000 &&
+                {this.props.info === false && this.x_array.length > 16000 &&
                     <>
                         <div className="choose_parent" style={{height: '71vh'}}>
                             <div className="choose_child">
